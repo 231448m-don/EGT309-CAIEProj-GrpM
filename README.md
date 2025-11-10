@@ -1,1 +1,1 @@
-# EGT309-CAIEPROJ
+## Summary of project + how to run the project
