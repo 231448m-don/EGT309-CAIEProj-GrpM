@@ -1,1 +1,12 @@
+# Project requirements
+kedro
+jupyterlab
 
+# Database access 
+SQLAlchemy
+
+# Core ML and data manipulation libraries
+pandas
+scikit-learn
+matplotlib
+seaborn
