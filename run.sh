@@ -8,4 +8,5 @@ echo "=== Running Random Forest ==="
 python src/random_forest.py
 
 echo "=== Running XGBoost Model ==="
-python src/xgb_model.py
+python src/xgboostt.py
+
