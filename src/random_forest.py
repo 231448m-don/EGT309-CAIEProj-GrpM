@@ -1,7 +1,7 @@
 import warnings
 warnings.filterwarnings("ignore", message="Some inputs do not have OOB scores")
 warnings.filterwarnings("ignore", category=FutureWarning)
-
+import os
 import sqlite3
 import pandas as pd
 import seaborn as sns
@@ -16,7 +16,10 @@ from sklearn.metrics import (
 )
 
 # 1. LOAD DATASET
-con = sqlite3.connect("C:/Users/ilhan/Desktop/EGT309-CAIEProj-GrpM/final_bmarket.db")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # /app
+DB_PATH = os.path.join(BASE_DIR, "final_bmarket.db")
+
+con = sqlite3.connect(DB_PATH)
 df = pd.read_sql_query("SELECT * FROM df_model_table", con)
 
 TARGET = "subscription_status_encoded"
@@ -96,3 +99,4 @@ print(classification_report(y_test, y_pred))
 
 print("=== CONFUSION MATRIX ===")
 print(confusion_matrix(y_test, y_pred))
+
