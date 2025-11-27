@@ -5,7 +5,3 @@ matplotlib
 scikit-learn
 xgboost
 imbalanced-learn
-re
-warnings
-os
-sqlite3
