@@ -4,6 +4,7 @@ from sklearn.metrics import (
     accuracy_score, f1_score,
     classification_report, confusion_matrix
 )
+import os
 import pandas as pd
 import sqlite3
 import seaborn as sns
@@ -14,7 +15,10 @@ from matplotlib import pyplot as plt
 # ==========================================
 # 1. LOAD DATA
 # ==========================================
-con = sqlite3.connect("C:/Users/ilhan/Desktop/EGT309-CAIEProj-GrpM/final_bmarket.db")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # /app
+DB_PATH = os.path.join(BASE_DIR, "final_bmarket.db")
+
+con = sqlite3.connect(DB_PATH)
 df = pd.read_sql_query("SELECT * FROM df_model_table", con)
 
 TARGET_COLUMN = "subscription_status_encoded"
@@ -97,3 +101,4 @@ cm_df = pd.DataFrame(
 )
 print("=== CONFUSION MATRIX ===")
 print(cm_df)
+
