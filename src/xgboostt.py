@@ -6,6 +6,8 @@ from sklearn.metrics import (
     classification_report, confusion_matrix
 )
 import os
+from pathlib import Path
+import joblib
 import pandas as pd
 import sqlite3
 import seaborn as sns
@@ -106,4 +108,14 @@ cm_base_df = pd.DataFrame(
 print("=== CONFUSION MATRIX ===")
 print(cm_base_df)
 
+# ==========================================
+# SAVE MODEL
+# ==========================================
+ROOT_DIR = Path(__file__).resolve().parent.parent   # goes up from src/ to project root
+SAVE_DIR = ROOT_DIR / "saved_models"
+SAVE_DIR.mkdir(exist_ok=True)
+
+model_path = SAVE_DIR / "xgboost.pkl"
+joblib.dump(xgb_clf, model_path)
+print(f"\n[LOG] Saved Logistic Regression model to: {model_path}")
 
