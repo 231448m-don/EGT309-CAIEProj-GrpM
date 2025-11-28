@@ -1,0 +1,13 @@
+import json
+from datetime import datetime
+
+metadata = {
+    "model": "XGBoost",
+    "timestamp": str(datetime.now()),
+    "best_params": grid_search.best_params_,
+    "f1_score": best_f1,
+    "threshold": best_thresh
+}
+
+with open(os.path.join(SAVE_DIR, "xgb_metadata.json"), "w") as f:
+    json.dump(metadata, f, indent=4)
