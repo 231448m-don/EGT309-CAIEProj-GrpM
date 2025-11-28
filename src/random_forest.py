@@ -2,6 +2,8 @@ import warnings
 warnings.filterwarnings("ignore", message="Some inputs do not have OOB scores")
 warnings.filterwarnings("ignore", category=FutureWarning)
 import os
+from pathlib import Path
+import joblib
 import sqlite3
 import pandas as pd
 import seaborn as sns
@@ -99,4 +101,15 @@ print(classification_report(y_test, y_pred))
 
 print("=== CONFUSION MATRIX ===")
 print(confusion_matrix(y_test, y_pred))
+
+# ==========================================
+# SAVE MODEL
+# ==========================================
+ROOT_DIR = Path(__file__).resolve().parent.parent   # goes up from src/ to project root
+SAVE_DIR = ROOT_DIR / "saved_models"
+SAVE_DIR.mkdir(exist_ok=True)
+
+model_path = SAVE_DIR / "randomforest.pkl"
+joblib.dump(rf_clf, model_path)
+print(f"\n[LOG] Saved Logistic Regression model to: {model_path}")
 
