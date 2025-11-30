@@ -1,6 +1,16 @@
 # How to run the pipeline
 
-Docker : 
+Kedro:
+You have to clone the git repository to obtain all the necessary folders.
+Then, create a virtual environment in your command prompt by running 'python -m venv (virtual environment name)'.
+Run the virtual environment with '(virtual environment name)\Scripts\activate.bat'
+Install the necessary python libraies and dependencies by running 'pip install -r requirements.txt'.
+Finally, ensure you are in the virtual environment and the necessaru dependencies are installed before running 'kedro run'.
+
+Kedro on Docker:
+You have to first change your command prompt directory to the kedro-pipeline directory.
+Then, create a docker container by running 'Docker build -t (docker container name) .'
+After that, you have to run the container with 'Docker run (docker container name), and the container shall start running the kedro pipeline.
 
 # Contributions
 
