@@ -24,9 +24,7 @@ CONFIG_LOADER_CLASS = OmegaConfigLoader
 CONFIG_LOADER_ARGS = {
     "base_env": "base",
     "default_run_env": "local",
-    "config_patterns": {
-        "spark": ["spark*", "spark*/**"],
-    }
+    "config_patterns": {}
 }
 
 # Class that manages Kedro's library components.
@@ -36,4 +34,5 @@ CONFIG_LOADER_ARGS = {
 # Class that manages the Data Catalog.
 # from kedro.io import DataCatalog
 # DATA_CATALOG_CLASS = DataCatalog
+
 
