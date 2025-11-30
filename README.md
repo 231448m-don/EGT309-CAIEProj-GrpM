@@ -1,6 +1,6 @@
-## How to run the pipeline
-## Contributions
-## Overview of EDA
+# How to run the pipeline
+# Contributions
+# Overview of EDA
 1. Cleaning and Standardising the Raw Data
 
 The dataset originally contained messy text fields, strange value formats, and several placeholder codes.
@@ -113,4 +113,4 @@ One-hot encoded categorical variables
 Total of 33 model-ready features
 
 This final dataset is reliable, structured, and optimised for machine learning training.
-## Reasons for choice of models
+# Reasons for choice of models
