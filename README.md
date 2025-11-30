@@ -114,3 +114,6 @@ Total of 33 model-ready features
 
 This final dataset is reliable, structured, and optimised for machine learning training.
 # Reasons for choice of models
+###1. Logistic Regression
+###2. Random Forest
+###3. Xtreme Gradient Boost (XGBoost)
