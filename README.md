@@ -1,4 +1,7 @@
 # How to run the pipeline
+
+Docker : 
+
 # Contributions
 
 Kay Kit: Exploratory Data Analysis + Slides
