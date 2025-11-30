@@ -1,7 +1,9 @@
-from kedro_pipeline.pipelines.models import pipeline as models_pipeline
+from kedro.framework.project import find_pipelines
+from kedro.pipeline import Pipeline
+from .pipelines.models.pipeline import create_pipeline as models_pipeline
 
-def register_pipelines():
+def register_pipelines() -> dict[str, Pipeline]:
     return {
-        "__default__": models_pipeline.create_pipeline(),
-        "models": models_pipeline.create_pipeline(),
+        "models": models_pipeline(),
+        "__default__": models_pipeline(),
     }
