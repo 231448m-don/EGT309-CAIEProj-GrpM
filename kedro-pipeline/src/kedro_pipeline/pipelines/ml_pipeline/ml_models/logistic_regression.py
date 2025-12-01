@@ -60,6 +60,8 @@ def train_logistic_regression(input_data: pd.DataFrame, target_col: str):
 
     print("\n[LOG] Logistic Regression performance")
     print(f"  accuracy = {acc:.4f}")
+    print(f"  precision = {prec:.4f}")
+    print(f"  recall    = {rec:.4f}")
     print(f"  f1       = {f1:.4f}")
     print("\nClassification report:")
     print(classification_report(y_test, y_pred))
@@ -67,3 +69,4 @@ def train_logistic_regression(input_data: pd.DataFrame, target_col: str):
     print(confusion_matrix(y_test, y_pred))
 
     return model
+
