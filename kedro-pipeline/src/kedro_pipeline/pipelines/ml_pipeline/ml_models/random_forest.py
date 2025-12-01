@@ -66,9 +66,10 @@ def train_random_forest(input_data: pd.DataFrame, target_col: str):
     )
 
     rf_clf.fit(X_train, y_train)
-    # ==========================================
-    # HIGH-PRECISION THRESHOLD TUNING (ADD THIS)
-    # ==========================================
+    
+    # ================================
+    # HIGH-PRECISION THRESHOLD TUNING 
+    # ================================
 
     # 1) Get predicted probabilities for the positive class
     y_proba = rf_clf.predict_proba(X_test)[:, 1]
@@ -80,8 +81,8 @@ def train_random_forest(input_data: pd.DataFrame, target_col: str):
     precision = precision[:-1]
     recall = recall[:-1]
 
-    # 3) Choose a minimum recall you are okay with
-    min_recall = 0.15  # adjust: lower → more extreme precision, higher → more balanced
+    # 3) Choose a minimum recall
+    min_recall = 0.15  # lower → more extreme precision, higher → more balanced
 
     mask = recall >= min_recall
 
@@ -111,3 +112,4 @@ def train_random_forest(input_data: pd.DataFrame, target_col: str):
     print(f"Custom F1-score : {f1_score(y_test, y_pred_custom):.3f}")
 
     return rf_clf
+
