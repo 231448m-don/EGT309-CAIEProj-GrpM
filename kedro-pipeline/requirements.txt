@@ -1,9 +1,6 @@
-# --- Core framework ---
 kedro==1.1.1
 kedro-datasets==9.0.0
 kedro-telemetry==0.6.5
-
-# --- Data & analytics ---
 pandas==2.3.3
 numpy==2.3.5
 scikit-learn==1.7.2
@@ -11,16 +8,10 @@ scipy==1.16.3
 xgboost==3.1.2
 pyarrow==22.0.0
 tables==3.10.2
-
-# --- Databases (if you actually use them) ---
 SQLAlchemy==2.0.44
 pyodbc==5.3.0
-
-# --- Plotting (optional but common in notebooks) ---
 matplotlib==3.10.7
 seaborn==0.13.2
-
-# --- Jupyter (only if you run notebooks in the image) ---
 jupyter==1.1.1
 ipykernel==7.1.0
 notebook==7.5.0
