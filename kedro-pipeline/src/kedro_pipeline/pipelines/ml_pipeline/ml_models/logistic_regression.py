@@ -1,6 +1,6 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, f1_score, precision_score, classification_report, confusion_matrix, recall_score, precision_recall_curve
 import pandas as pd
 import numpy as np
 
@@ -48,25 +48,60 @@ def train_logistic_regression(input_data: pd.DataFrame, target_col: str):
     )
 
     model = LogisticRegression(
+        penalty="l2",
+        C=0.5,                # smaller = stronger regularization (often cleaner, more precise)
+        class_weight="balanced",  # handle imbalance
+        solver="liblinear",       # good for small/medium + imbalance
         max_iter=1000,
         random_state=42,
     )
     model.fit(X_train, y_train)
 
-    # 6. Basic metrics (for logging)
-    y_pred = model.predict(X_test)
-    acc = accuracy_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
+    # ==========================================
+    # HIGH-PRECISION THRESHOLD TUNING (ADD THIS)
+    # ==========================================
 
-    print("\n[LOG] Logistic Regression performance")
-    print(f"  accuracy = {acc:.4f}")
-    print(f"  precision = {prec:.4f}")
-    print(f"  recall    = {rec:.4f}")
-    print(f"  f1       = {f1:.4f}")
-    print("\nClassification report:")
-    print(classification_report(y_test, y_pred))
-    print("Confusion matrix:")
-    print(confusion_matrix(y_test, y_pred))
+    # 1) Get predicted probabilities for class 1
+    y_proba = model.predict_proba(X_test)[:, 1]
+
+    # 2) Build Precision–Recall curve
+    precision, recall, thresholds = precision_recall_curve(y_test, y_proba)
+
+    # thresholds has length = len(precision) - 1, so drop last p/r
+    precision = precision[:-1]
+    recall = recall[:-1]
+
+    # 3) Choose a minimum recall you’re okay with
+    min_recall = 0.15  # you can bump this up/down
+
+    # Only keep thresholds where recall >= min_recall
+    mask = recall >= min_recall
+
+    if mask.any():
+        # Among those thresholds, pick the one with highest precision
+        best_idx = precision[mask].argmax()
+        best_thr = thresholds[mask][best_idx]
+
+        print(f"\n[LOGREG HIGH PRECISION] Chosen threshold: {best_thr:.3f}")
+        print(f"Precision at this threshold: {precision[mask][best_idx]:.3f}")
+        print(f"Recall at this threshold   : {recall[mask][best_idx]:.3f}")
+    else:
+        # Fallback if nothing meets the recall requirement
+        best_thr = 0.5
+        print(f"\n[LOGREG HIGH PRECISION] No threshold reached recall >= {min_recall}. Using 0.5.")
+
+    # 4) Use this stricter threshold to make predictions
+    y_pred_custom = (y_proba >= best_thr).astype(int)
+
+    print("\n=== Confusion Matrix (LogReg – custom high-precision threshold) ===")
+    print(confusion_matrix(y_test, y_pred_custom))
+
+    print("\n=== Classification Report (LogReg – custom high-precision threshold) ===")
+    print(classification_report(y_test, y_pred_custom, digits=3))
+
+    print(f"Custom precision: {precision_score(y_test, y_pred_custom):.3f}")
+    print(f"Custom recall   : {recall_score(y_test, y_pred_custom):.3f}")
+    print(f"Custom F1-score : {f1_score(y_test, y_pred_custom):.3f}")
+
 
     return model
-
