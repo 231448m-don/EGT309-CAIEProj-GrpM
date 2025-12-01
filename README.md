@@ -144,22 +144,34 @@ This final dataset is reliable, structured, and optimised for machine learning t
 
 # Reasons for choice of models
 
-1. Logistic Regression
-   One of the simpler and more interpretable classification models.
-   It works well when there are relationships between features, such as the age group, marital status, education level in the given data.
-   Quick to train + fast to predict.
-   However. it does not capture nonlinear patterns and is sensitive to outliers and multicollinearity.
+## 1. Logistic Regression
    
-2. Random Forest
-   This model makes up for Logistic Regressions' incapability of capturing nonlinear patterns.
-   Works very well with tabular data like the one that was provided.
-   Is able to handle categorical, numerical relationships, and provides feature importances easily.
-   The downside is that it is slower than Logistic Regression, predictions are less interpretable, and the accuracy is not as good as XGBoost.
+   - One of the simpler and more interpretable classification models.
+     
+   - It works well when there are relationships between features, such as the age group, marital status, education level in the given data.
+     
+   - Quick to train + fast to predict.
+     
+   - However. it does not capture nonlinear patterns and is sensitive to outliers and multicollinearity.
    
-3. Xtreme Gradient Boost (XGBoost)
-   This model is one of the most powerful algorithms for tabular data.
-   Handles complex interactions between features really well, and missing data automatically.
-   Also, captures nonlinear patters and has the highest predictive performance compared to Random Forest and Logistic Regression.
-   But, it is more complex to tune than the other 2 models, and training time is longer as well.
+## 2. Random Forest
+   
+   - This model makes up for Logistic Regressions' incapability of capturing nonlinear patterns.
+     
+   - Works very well with tabular data like the one that was provided.
+     
+   - Is able to handle categorical, numerical relationships, and provides feature importances easily.
+     
+   - The downside is that it is slower than Logistic Regression, predictions are less interpretable, and the accuracy is not as good as XGBoost.
+   
+## 3. Xtreme Gradient Boost (XGBoost)
+   
+   - This model is one of the most powerful algorithms for tabular data.
+     
+   - Handles complex interactions between features really well, and missing data automatically.
+     
+   - Also, captures nonlinear patters and has the highest predictive performance compared to Random Forest and Logistic Regression.
+     
+   - But, it is more complex to tune than the other 2 models, and training time is longer as well.
 
 Therefore, we chose these 3 models to mitigate each model's disadvantages and all in all have more advantages than disadvantages.
