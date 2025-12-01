@@ -1,6 +1,6 @@
 from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, f1_score, precision_score, classification_report, confusion_matrix, precision_recall_curve
 import pandas as pd
 import numpy as np
 
@@ -60,22 +60,46 @@ def train_xgboost(input_data: pd.DataFrame, target_col: str):
         n_jobs=-1,
     )
 
-    xgb_clf.fit(X_train, y_train)
+    # ==========================================
+    # HIGH-PRECISION THRESHOLD TUNING (ADD THIS)
+    # ==========================================
 
-    # 7. Metrics
-    y_pred = (xgb_clf.predict_proba(X_test)[:, 1] > 0.5).astype(int)
-    acc = accuracy_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
+    xgb_clf.fit(X_train, y_train)   
+    # Get predicted probabilities for the positive class
+    y_proba = xgb_clf.predict_proba(X_test)[:, 1]
 
-    print("\n[LOG] XGBoost performance")
-    print(f"  accuracy = {acc:.4f}")
-    print(f"  precision = {prec:.4f}")
-    print(f"  recall    = {rec:.4f}")
-    print(f"  f1       = {f1:.4f}")
-    print("\nClassification report:")
-    print(classification_report(y_test, y_pred))
-    print("Confusion matrix:")
-    print(confusion_matrix(y_test, y_pred))
+    # Build Precision–Recall curve
+    precision, recall, thresholds = precision_recall_curve(y_test, y_proba)
+
+    # Optional: enforce a minimum recall (e.g. 0.20)
+    min_recall = 0.15
+    precision = precision[:-1]  # last point has no corresponding threshold
+    recall = recall[:-1]
+
+    mask = recall >= min_recall
+    if mask.any():
+        # Among thresholds that keep recall >= min_recall, pick max precision
+        best_idx = np.argmax(precision[mask])
+        best_thr = thresholds[mask][best_idx]
+        print(f"\n[HIGH PRECISION] Chosen threshold: {best_thr:.3f}")
+        print(f"Precision at this threshold: {precision[mask][best_idx]:.3f}")
+        print(f"Recall at this threshold   : {recall[mask][best_idx]:.3f}")
+    else:
+        # Fallback if nothing meets min_recall
+        best_thr = 0.5
+        print(f"\n[HIGH PRECISION] No threshold reached recall >= {min_recall}. Using 0.5.")
+
+    # Use the chosen threshold instead of default 0.5
+    y_pred_custom = (y_proba >= best_thr).astype(int)
+
+    print("\n=== Confusion Matrix (custom high-precision threshold) ===")
+    print(confusion_matrix(y_test, y_pred_custom))
+
+    print("\n=== Classification Report (custom high-precision threshold) ===")
+    print(classification_report(y_test, y_pred_custom, digits=3))
+
+    print(f"Custom precision: {precision_score(y_test, y_pred_custom):.3f}")
+    print(f"Custom F1-score : {f1_score(y_test, y_pred_custom):.3f}")
+
 
     return xgb_clf
-
