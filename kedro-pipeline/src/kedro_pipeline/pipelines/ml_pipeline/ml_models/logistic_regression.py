@@ -57,9 +57,9 @@ def train_logistic_regression(input_data: pd.DataFrame, target_col: str):
     )
     model.fit(X_train, y_train)
 
-    # ==========================================
-    # HIGH-PRECISION THRESHOLD TUNING (ADD THIS)
-    # ==========================================
+    # ================================
+    # HIGH-PRECISION THRESHOLD TUNING 
+    # ================================
 
     # 1) Get predicted probabilities for class 1
     y_proba = model.predict_proba(X_test)[:, 1]
@@ -71,8 +71,8 @@ def train_logistic_regression(input_data: pd.DataFrame, target_col: str):
     precision = precision[:-1]
     recall = recall[:-1]
 
-    # 3) Choose a minimum recall you’re okay with
-    min_recall = 0.15  # you can bump this up/down
+    # 3) Choose a minimum recall
+    min_recall = 0.15  
 
     # Only keep thresholds where recall >= min_recall
     mask = recall >= min_recall
@@ -105,3 +105,4 @@ def train_logistic_regression(input_data: pd.DataFrame, target_col: str):
 
 
     return model
+
