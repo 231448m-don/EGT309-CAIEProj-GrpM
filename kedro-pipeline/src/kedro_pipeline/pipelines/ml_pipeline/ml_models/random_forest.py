@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score,
-    f1_score, classification_report, confusion_matrix,
+    f1_score, classification_report, confusion_matrix, precision_recall_curve
 )
 
 def train_random_forest(input_data: pd.DataFrame, target_col: str):
@@ -56,34 +56,58 @@ def train_random_forest(input_data: pd.DataFrame, target_col: str):
 
     # 6. Model
     rf_clf = RandomForestClassifier(
-        n_estimators=500,
-        max_depth=None,
-        min_samples_split=5,
-        min_samples_leaf=2,
-        max_features="sqrt",
-        random_state=42,
+        n_estimators=300,
+        max_depth=6,              # limit depth → less overfitting
+        min_samples_leaf=5,       # leaf must have enough samples
+        min_samples_split=10,
+        class_weight="balanced",  # handle imbalance
         n_jobs=-1,
-        class_weight="balanced_subsample",
-        oob_score=False,
+        random_state=42,
     )
 
     rf_clf.fit(X_train, y_train)
+    # ==========================================
+    # HIGH-PRECISION THRESHOLD TUNING (ADD THIS)
+    # ==========================================
 
-    # 7. Metrics
-    y_pred = rf_clf.predict(X_test)
-    acc = accuracy_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
-    prec = precision_score(y_test, y_pred)
-    rec = recall_score(y_test, y_pred)
+    # 1) Get predicted probabilities for the positive class
+    y_proba = rf_clf.predict_proba(X_test)[:, 1]
 
-    print("\n[LOG] Random Forest performance")
-    print(f"  accuracy  = {acc:.4f}")
-    print(f"  precision = {prec:.4f}")
-    print(f"  recall    = {rec:.4f}")
-    print(f"  f1        = {f1:.4f}")
-    print("\nClassification report:")
-    print(classification_report(y_test, y_pred))
-    print("Confusion matrix:")
-    print(confusion_matrix(y_test, y_pred))
+    # 2) Build Precision–Recall curve
+    precision, recall, thresholds = precision_recall_curve(y_test, y_proba)
+
+    # thresholds has length = len(precision) - 1
+    precision = precision[:-1]
+    recall = recall[:-1]
+
+    # 3) Choose a minimum recall you are okay with
+    min_recall = 0.15  # adjust: lower → more extreme precision, higher → more balanced
+
+    mask = recall >= min_recall
+
+    if mask.any():
+        # Among thresholds that keep recall >= min_recall, pick the one with max precision
+        best_idx = precision[mask].argmax()
+        best_thr = thresholds[mask][best_idx]
+
+        print(f"\n[RF HIGH PRECISION] Chosen threshold: {best_thr:.3f}")
+        print(f"Precision at this threshold: {precision[mask][best_idx]:.3f}")
+        print(f"Recall at this threshold   : {recall[mask][best_idx]:.3f}")
+    else:
+        best_thr = 0.5
+        print(f"\n[RF HIGH PRECISION] No threshold reached recall >= {min_recall}. Using 0.5.")
+
+    # 4) Apply this stricter threshold
+    y_pred_custom = (y_proba >= best_thr).astype(int)
+
+    print("\n=== Confusion Matrix (Random Forest – custom high-precision threshold) ===")
+    print(confusion_matrix(y_test, y_pred_custom))
+
+    print("\n=== Classification Report (Random Forest – custom high-precision threshold) ===")
+    print(classification_report(y_test, y_pred_custom, digits=3))
+
+    print(f"Custom precision: {precision_score(y_test, y_pred_custom):.3f}")
+    print(f"Custom recall   : {recall_score(y_test, y_pred_custom):.3f}")
+    print(f"Custom F1-score : {f1_score(y_test, y_pred_custom):.3f}")
 
     return rf_clf
