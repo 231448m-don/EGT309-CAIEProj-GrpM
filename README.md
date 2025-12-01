@@ -10,7 +10,7 @@ Run the virtual environment with '(virtual environment name)\Scripts\activate.ba
 
 Install the necessary python libraies and dependencies by running 'pip install -r requirements.txt'.
 
-Finally, ensure you are in the virtual environment and the necessaru dependencies are installed before running 'kedro run'.
+Finally, ensure you are in the virtual environment and the necessary dependencies are installed before running 'kedro run'.
 
 ## Kedro on Docker:
 
