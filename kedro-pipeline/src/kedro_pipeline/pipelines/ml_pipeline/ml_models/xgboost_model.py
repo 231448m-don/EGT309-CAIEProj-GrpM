@@ -60,9 +60,9 @@ def train_xgboost(input_data: pd.DataFrame, target_col: str):
         n_jobs=-1,
     )
 
-    # ==========================================
-    # HIGH-PRECISION THRESHOLD TUNING (ADD THIS)
-    # ==========================================
+    # ================================
+    # HIGH-PRECISION THRESHOLD TUNING
+    # ================================
 
     xgb_clf.fit(X_train, y_train)   
     # Get predicted probabilities for the positive class
@@ -71,7 +71,6 @@ def train_xgboost(input_data: pd.DataFrame, target_col: str):
     # Build Precision–Recall curve
     precision, recall, thresholds = precision_recall_curve(y_test, y_proba)
 
-    # Optional: enforce a minimum recall (e.g. 0.20)
     min_recall = 0.15
     precision = precision[:-1]  # last point has no corresponding threshold
     recall = recall[:-1]
@@ -103,3 +102,4 @@ def train_xgboost(input_data: pd.DataFrame, target_col: str):
 
 
     return xgb_clf
+
