@@ -30,9 +30,13 @@ Exploratory Data Analysis + Slides
 
 Kedro Pipeline + Docker + Slides
 
+(pipeline.py, nodes.py, pipeline_registration.py, catalog.yml, parameters.yml)
+
 ## Ilhan: 
 
 Machine Learning Algorithms + Docker + Slides
+
+(logistic_regression.py, random_forest.py, xgboost.py)
 
 # Overview of EDA
 ## 1. Cleaning and Standardising the Raw Data
